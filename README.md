@@ -12,6 +12,40 @@ This pilot uses both a code repository (using git) and a separate data repositor
 the R programs for the production datasets a little setup is required so your sandbox
 has the proper coordinates and package support. 
 
+## R package setup with renv
+
+This project uses [renv](https://rstudio.github.io/renv/) to keep its R package
+versions reproducible. The `renv.lock` file records the versions to use, and
+renv maintains a project-specific package library separate from your usual R
+library.
+
+After cloning the repository:
+
+1. Install R if needed. The lockfile records R 4.6.2; using that version gives
+   the closest match to the recorded environment. renv does not install R itself.
+2. Start a new R session with the repository root as its working directory, or
+   open the repository as a project in your R IDE. The project `.Rprofile`
+   automatically activates renv; on first use, it may download and install renv.
+3. In the R console, restore the packages recorded in the lockfile:
+
+   ```r
+   renv::restore()
+   ```
+
+   Review and confirm the proposed changes when prompted. Restoring may take
+   some time and may require system libraries or build tools for certain packages.
+
+Run `renv::restore()` again after pulling changes to `renv.lock`. You can use
+`renv::status()` to check for differences between the project library and the
+lockfile. If you intentionally add or update a dependency, test the changes,
+then run `renv::snapshot()` and include the resulting `renv.lock` change in
+your contribution. Do not snapshot merely to set up the project.
+
+renv manages R packages, not the datasets or DVC itself. Follow the DVC
+instructions below to obtain the input data before running the programs. See
+the [renv introduction](https://rstudio.github.io/renv/articles/renv.html) for
+more detail.
+
 # Contributor Setup and Pushing Data to DVC
 
 *Pre-requisite Steps*
@@ -74,8 +108,8 @@ has the proper coordinates and package support.
     
     $dvc pull
     
-  8. Run any/all of the production datasets using the R programs found under code/adam relative
-     path from your project root. The R production code will run the dataset is output to the
+  8. After completing the R package setup above, run any/all of the production datasets using
+     the R programs found under code/adam relative to your project root. The dataset is output to the
      data/adam relative path from root directory in your project sanbox.
      
 # Pulling Data from DVC

@@ -1,3 +1,4 @@
+source("renv/activate.R")
 # File locations ----------------------------------------------------------
 path <- list(
   sdtm = file.path(getwd(), "data/sdtm/"),
